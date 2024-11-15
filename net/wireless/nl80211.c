@@ -15939,14 +15939,13 @@ nl80211_add_mod_link_station(struct sk_buff *skb, struct genl_info *info,
 	if (add && !info->attrs[NL80211_ATTR_MAC])
 		return -EINVAL;
 
-	if (add && !info->attrs[NL80211_ATTR_MLD_ADDR])
+	if (!info->attrs[NL80211_ATTR_MLD_ADDR])
 		return -EINVAL;
 
 	if (add && !info->attrs[NL80211_ATTR_STA_SUPPORTED_RATES])
 		return -EINVAL;
 
-	if (info->attrs[NL80211_ATTR_MLD_ADDR])
-		params.mld_mac = nla_data(info->attrs[NL80211_ATTR_MLD_ADDR]);
+	params.mld_mac = nla_data(info->attrs[NL80211_ATTR_MLD_ADDR]);
 
 	if (info->attrs[NL80211_ATTR_MAC]) {
 		params.link_mac = nla_data(info->attrs[NL80211_ATTR_MAC]);
@@ -17753,6 +17752,7 @@ void nl80211_send_connect_result(struct cfg80211_registered_device *rdev,
 			link_info_size += (cr->links[link].bssid ||
 					   cr->links[link].bss) ?
 					  nla_total_size(ETH_ALEN) : 0;
+			link_info_size += nla_total_size(sizeof(u16));
 		}
 	}
 
@@ -17821,7 +17821,9 @@ void nl80211_send_connect_result(struct cfg80211_registered_device *rdev,
 			     nla_put(msg, NL80211_ATTR_BSSID, ETH_ALEN, bssid)) ||
 			    (cr->links[link].addr &&
 			     nla_put(msg, NL80211_ATTR_MAC, ETH_ALEN,
-				     cr->links[link].addr)))
+				     cr->links[link].addr)) ||
+			    nla_put_u16(msg, NL80211_ATTR_STATUS_CODE,
+					cr->links[link].status))
 				goto nla_put_failure;
 
 			nla_nest_end(msg, nested_mlo_links);
