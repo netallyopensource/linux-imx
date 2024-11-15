@@ -40,9 +40,13 @@
  * use restrictions.
  */
 
-#ifndef __ANDROID_COMMON_KERNEL__
 #define CFG80211_11BE_BASIC 1
-#endif /* __ANDROID_COMMON_KERNEL__ */
+
+#define CFG80211_SINGLE_NETDEV_MULTI_LINK_SUPPORT 1
+
+#define CFG80211_TX_CONTROL_PORT_LINK_SUPPORT 1
+
+#define CFG80211_EXTERNAL_AUTH_MLO_SUPPORT 1
 
 /**
  * DOC: Device registration
