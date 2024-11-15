@@ -40,6 +40,9 @@
  * use restrictions.
  */
 
+#ifndef __ANDROID_COMMON_KERNEL__
+#define CFG80211_11BE_BASIC 1
+#endif /* __ANDROID_COMMON_KERNEL__ */
 
 /**
  * DOC: Device registration
